@@ -1,0 +1,17 @@
+{
+  "ver": "1.0.25",
+  "uuid": "b2ad521d-7e98-4552-bf5d-b2c5b2c3f266",
+  "compiledShaders": [
+    {
+      "glsl1": {
+        "vert": "\nprecision highp float;\nuniform mat4 cc_matViewProj;\nuniform mat4 cc_matWorld;\nattribute vec3 a_position;\nattribute vec4 a_color;\nvarying vec4 v_color;\n#if USE_TEXTURE\nattribute vec2 a_uv0;\nvarying vec2 v_uv0;\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if CC_USE_MODEL\n  pos = cc_matViewProj * cc_matWorld * pos;\n  #else\n  pos = cc_matViewProj * pos;\n  #endif\n  #if USE_TEXTURE\n  v_uv0 = a_uv0;\n  #endif\n  v_color = a_color;\n  gl_Position = pos;\n}",
+        "frag": "\nprecision highp float;\n#if USE_ALPHA_TEST\n#endif\nvarying vec4 v_color;\n#if USE_TEXTURE\nvarying vec2 v_uv0;\nuniform sampler2D texture;\n#endif\nuniform float strength;\nuniform float k1;\nuniform float time;\nuniform float k2;\nuniform float turningPoint;\nuniform float factor;\nvoid main () {\n  vec4 color = vec4(1, 1, 1, 1);\n  color *= texture2D(texture, v_uv0);\n    if(time >= 0.0){\n      if(v_uv0.x <= turningPoint){\n        if(v_uv0.y >= k1 * v_uv0.x - factor + time  &&\n           v_uv0.y <=  k1 * v_uv0.x  + time\n            ){\n             color *= strength;\n        }\n      }else{\n        if(v_uv0.y >= k2 * v_uv0.x + (k1 - k2) * turningPoint - factor + time &&\n          v_uv0.y <= k2 * v_uv0.x + (k1 - k2) * turningPoint + time\n        ){\n          color *= strength;\n        }\n      }\n    }\n  gl_FragColor = color;\n}"
+      },
+      "glsl3": {
+        "vert": "\nprecision highp float;\nuniform CCGlobal {\n  mat4 cc_matView;\n  mat4 cc_matViewInv;\n  mat4 cc_matProj;\n  mat4 cc_matProjInv;\n  mat4 cc_matViewProj;\n  mat4 cc_matViewProjInv;\n  vec4 cc_cameraPos;\n  vec4 cc_time;\n  mediump vec4 cc_screenSize;\n  mediump vec4 cc_screenScale;\n};\nuniform CCLocal {\n  mat4 cc_matWorld;\n  mat4 cc_matWorldIT;\n};\nin vec3 a_position;\nin vec4 a_color;\nout vec4 v_color;\n#if USE_TEXTURE\nin vec2 a_uv0;\nout vec2 v_uv0;\n#endif\nvoid main () {\n  vec4 pos = vec4(a_position, 1);\n  #if CC_USE_MODEL\n  pos = cc_matViewProj * cc_matWorld * pos;\n  #else\n  pos = cc_matViewProj * pos;\n  #endif\n  #if USE_TEXTURE\n  v_uv0 = a_uv0;\n  #endif\n  v_color = a_color;\n  gl_Position = pos;\n}",
+        "frag": "\nprecision highp float;\n#if USE_ALPHA_TEST\n  uniform ALPHA_TEST {\n    float alphaThreshold;\n  };\n#endif\nuniform CCGlobal {\n  mat4 cc_matView;\n  mat4 cc_matViewInv;\n  mat4 cc_matProj;\n  mat4 cc_matProjInv;\n  mat4 cc_matViewProj;\n  mat4 cc_matViewProjInv;\n  vec4 cc_cameraPos;\n  vec4 cc_time;\n  mediump vec4 cc_screenSize;\n  mediump vec4 cc_screenScale;\n};\nin vec4 v_color;\n#if USE_TEXTURE\nin vec2 v_uv0;\nuniform sampler2D texture;\n#endif\nuniform ARGS{\n  float width;\n  float strength;\n  float k1;\n  float time;\n  float k2;\n  float turningPoint;\n  float factor;\n};\nvoid main () {\n  vec4 color = vec4(1, 1, 1, 1);\n  color *= texture(texture, v_uv0);\n    if(time >= 0.0){\n      if(v_uv0.x <= turningPoint){\n        if(v_uv0.y >= k1 * v_uv0.x - factor + time  &&\n           v_uv0.y <=  k1 * v_uv0.x  + time\n            ){\n             color *= strength;\n        }\n      }else{\n        if(v_uv0.y >= k2 * v_uv0.x + (k1 - k2) * turningPoint - factor + time &&\n          v_uv0.y <= k2 * v_uv0.x + (k1 - k2) * turningPoint + time\n        ){\n          color *= strength;\n        }\n      }\n    }\n  gl_FragColor = color;\n}"
+      }
+    }
+  ],
+  "subMetas": {}
+}

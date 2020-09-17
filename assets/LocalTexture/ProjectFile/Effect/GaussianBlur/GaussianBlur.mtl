@@ -1,0 +1,41 @@
+{
+  "__type__": "cc.Material",
+  "_name": "GaussianBlur",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "648e4dec-2edd-46e1-97de-1549cfd00546"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      },
+      "props": {
+        "kernel_0": {
+          "__type__": "cc.Vec4",
+          "x": 0.0625,
+          "y": 0.125,
+          "z": 0.0625,
+          "w": 0
+        },
+        "kernel_1": {
+          "__type__": "cc.Vec4",
+          "x": 0.125,
+          "y": 0.25,
+          "z": 0.125,
+          "w": 0
+        },
+        "kernel_2": {
+          "__type__": "cc.Vec4",
+          "x": 0.0625,
+          "y": 0.1111111,
+          "z": 0.0625,
+          "w": 0
+        },
+        "scaleFactor": 1
+      }
+    }
+  }
+}

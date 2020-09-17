@@ -1,0 +1,19 @@
+{
+  "package": "com.sscx.dmxs.vivominigame",
+  "name": "倒霉先生",
+  "icon": "F:\\myCCCProjects\\MrBadLuckPro\\MrBadLuck\\vivo_icon.png",
+  "versionName": "1.0.6",
+  "versionCode": "6",
+  "minPlatformVersion": "1060",
+  "deviceOrientation": "portrait",
+  "logLevel": "log",
+  "npmPath": "",
+  "tinyPackageMode": true,
+  "tinyPackageServer": "https://www.zywxgames.com/Resource/liufenghong/daomeixiansheng/Vivo9",
+  "useDebugKey": false,
+  "privatePath": "F:\\myCCCProjects\\MrBadLuckPro\\MrBadLuck\\vivoSecret\\private.pem",
+  "certificatePath": "F:\\myCCCProjects\\MrBadLuckPro\\MrBadLuck\\vivoSecret\\certificate.pem",
+  "disabledMode": "",
+  "showNpmPath": false,
+  "packFirstScreenRes": true
+}

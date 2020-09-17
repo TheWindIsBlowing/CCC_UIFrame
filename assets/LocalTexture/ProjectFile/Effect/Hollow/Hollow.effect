@@ -1,0 +1,103 @@
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.  
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+        iResolution: {value: [750.0, 1334.0], editor: { tooltip: '节点尺寸' }  }
+        point: {value: [0.0, 0.0], editor: { tooltip: '镂空点' }  }
+        radius: { value: 100, editor: { tooltip: '半径 (目标宽度 / 节点宽度)' } }
+        feather: { value: 10, editor: { tooltip: '边缘虚化宽度' } }
+        alphaThreshold: { value: 0.5 }
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+  #endif
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    #else
+    pos = cc_matViewProj * pos;
+    #endif
+
+    #if USE_TEXTURE
+    v_uv0 = a_uv0;
+    #endif
+
+    v_color = a_color;
+
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+  
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  #endif
+
+  uniform ARGS{
+    vec2 iResolution;
+    vec2 point;
+    float radius;
+    float feather;
+  };
+
+  // float circle(in vec2 _st, in float _radius, vec2 _point){
+  //   vec2 dist = _st - _point;
+	//   return 1. - smoothstep(_radius - (_radius * 0.1), _radius + (_radius * 0.1), dot(dist, dist) * 4.0);
+  // }
+
+  void main () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    #if USE_TEXTURE
+      CCTexture(texture, v_uv0, o);
+    #endif
+
+    o *= v_color;
+
+    ALPHA_TEST(o);
+    
+    float ratio = iResolution.y / iResolution.x;
+    float dist = distance(vec2(v_uv0.x, v_uv0.y * ratio), 
+          vec2(point.x / iResolution.x + 0.5, (0.5 - point.y / iResolution.y) * ratio));
+    float _radius = radius / iResolution.x;
+    float _feather = feather / iResolution.x;
+    o.a = smoothstep(_radius - _feather, _radius, dist) * o.a;
+
+    gl_FragColor = o;
+  }
+}%

@@ -1,0 +1,30 @@
+{
+  "__type__": "cc.Material",
+  "_name": "Hollow",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "e913aa42-6f08-4f0b-a21a-6c77f8787ce5"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "iResolution": {
+          "__type__": "cc.Vec2",
+          "x": 750,
+          "y": 1334
+        },
+        "point": {
+          "__type__": "cc.Vec2",
+          "x": -300,
+          "y": -340
+        },
+        "feather": 20
+      },
+      "defines": {
+        "USE_TEXTURE": true
+      }
+    }
+  }
+}

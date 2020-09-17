@@ -1,0 +1,22 @@
+{
+    "deviceOrientation": "portrait",
+    "networkTimeout": {
+        "request": 5000,
+        "connectSocket": 5000,
+        "uploadFile": 5000,
+        "downloadFile": 5000
+    },
+    "subpackages": [],
+    "ttNavigateToMiniGameAppIdList": [
+        "tt0e5178ec917be9cb",
+        "tt47ba3107d89079e6",
+        "tt746102dceb4bbfd4",
+        "tt706b06d6ef41ec37",
+        "tt8866fedb174c0810",
+        "tt5dd12b6cc2fbdc1a",
+        "ttd86faed24745581c",
+        "tt903ae6870f100c0c",
+        "ttee0898b571223343",
+        "tt2e9c5821b1b65646"
+    ]
+}

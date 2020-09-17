@@ -1,0 +1,26 @@
+{
+  "__type__": "cc.Material",
+  "_name": "SolidFilterUnselected",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "e1aab854-ca1f-4ef1-bb18-846249a92819"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      },
+      "props": {
+        "solidColor": {
+          "__type__": "cc.Color",
+          "r": 149,
+          "g": 171,
+          "b": 213,
+          "a": 255
+        }
+      }
+    }
+  }
+}

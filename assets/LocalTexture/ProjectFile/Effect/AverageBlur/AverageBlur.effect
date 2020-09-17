@@ -1,0 +1,98 @@
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.  
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+        widthStep: { value: 0.001 }
+        heightStep: { value: 0.00075}
+        factor: { value: 0.8 }
+        alphaThreshold: { value: 0.5 }
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+  #endif
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    #else
+    pos = cc_matViewProj * pos;
+    #endif
+
+    #if USE_TEXTURE
+    v_uv0 = a_uv0;
+    #endif
+
+    v_color = a_color;
+
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+  
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  #endif
+
+  uniform ARGS{
+    float widthStep;
+    float heightStep;
+    float factor;
+  };
+  const float blurRadius = 2.0;
+  const float blurPixels = (blurRadius * 2.0 + 1.0) * (blurRadius * 2.0 + 1.0);
+
+  void main () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    #if USE_TEXTURE
+      CCTexture(texture, v_uv0, o);
+    #endif
+
+    o *= v_color;
+
+    ALPHA_TEST(o);
+    vec3 sumColor = vec3(0.0);
+    for(float i = -blurRadius; i <= blurRadius; i++){
+      for(float j = -blurRadius; j <= blurRadius; j++){
+        vec2 coord = vec2(i * widthStep, j * heightStep);
+        sumColor += texture(texture, v_uv0 + coord).rgb;
+      }
+    }
+
+    gl_FragColor = vec4(mix(o.rgb, sumColor / blurPixels, factor).rgb, 1.0);
+  }
+}%
